@@ -11,7 +11,7 @@ class MDP:
 
         #finite set of possible rewards
         key, subkey = random.split(key)
-        self.rewards = random.normal(subkey, (num_rewards,), dtype=jnp.float32)
+        self.rewards = reward_std * random.normal(subkey, (num_rewards,), dtype=jnp.float32) + reward_mean
         del subkey
 
         #transitions probabilities:
@@ -30,7 +30,7 @@ class MDP:
 
         self.reward_ps = reward_ps / reward_ps.sum(axis=-1, keepdims=True)
 
-        #expected rewards:
+        #expected rewards [s,a]
         self.expected_rewards = jnp.sum(self.reward_ps * self.rewards[None, None, :], axis=2)
 
 
